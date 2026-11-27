@@ -29,3 +29,8 @@ GitHub stores the project source; it does not run Godot or automatically create 
 - Kept story missions and levels out of the project, as requested.
 
 This is a lightweight blockout made from Godot primitive meshes, not a finished detailed city. It has not yet been launched in the Godot editor or tested on a Poco X7 Pro. Next step: improve player movement and add on-screen mobile controls.
+
+### Character appearance update
+- Replaced the single capsule placeholder with a human-proportioned masked operator assembled from separate head, torso, arms, legs, helmet and gear meshes.
+- Added a pale skull-style face mask and dark tactical outfit details to evoke the requested Ghost-like look.
+- This is still a procedural low-poly placeholder, not a finished realistic scanned/rigged character model; animations, detailed textures and a licensed/original high-quality model remain future work.
