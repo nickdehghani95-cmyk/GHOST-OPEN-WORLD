@@ -6,6 +6,8 @@ extends CharacterBody3D
 @export var jump_velocity: float = 5.2
 
 var jacket_material: StandardMaterial3D
+var avatar: Node3D
+var animation_clock: float = 0.0
 
 func _ready() -> void:
     _setup_input()
@@ -74,7 +76,7 @@ func _build_ghost_character() -> void:
     var metal := _mat(Color(0.42, 0.46, 0.5), 0.72, 0.32)
     var boot := _mat(Color(0.012, 0.016, 0.022))
 
-    var avatar := Node3D.new()
+    avatar = Node3D.new()
     avatar.name = "GhostOperator"
     add_child(avatar)
 
@@ -118,7 +120,14 @@ func _build_ghost_character() -> void:
 
 func _physics_process(delta: float) -> void:
     var input_2d := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+    var camera := get_viewport().get_camera_3d()
     var direction := Vector3(input_2d.x, 0.0, input_2d.y)
+    if camera:
+        var camera_basis := camera.global_transform.basis
+        var camera_right := camera_basis.x
+        var camera_forward := -camera_basis.z
+        direction = camera_right * input_2d.x + camera_forward * input_2d.y
+        direction.y = 0.0
     if direction.length() > 0.01:
         direction = direction.normalized()
     velocity.x = move_toward(velocity.x, direction.x * move_speed, acceleration * delta)
@@ -130,6 +139,14 @@ func _physics_process(delta: float) -> void:
     if direction.length() > 0.1:
         look_at(global_position + direction, Vector3.UP)
     move_and_slide()
+    # Lightweight procedural idle/walk motion while proper rigged animation assets are prepared.
+    animation_clock += delta
+    if avatar:
+        var horizontal_speed := Vector2(velocity.x, velocity.z).length()
+        var moving := horizontal_speed > 0.35
+        var bob_amount := 0.045 if moving else 0.012
+        avatar.position.y = sin(animation_clock * (10.0 if moving else 2.0)) * bob_amount
+        avatar.rotation.z = sin(animation_clock * 5.0) * (0.025 if moving else 0.008)
 
 func set_outfit_color(color: Color) -> void:
     if jacket_material:
