@@ -16,9 +16,8 @@ func _setup_input() -> void:
     for action in keys:
         if not InputMap.has_action(action):
             InputMap.add_action(action)
-        var event := InputEventKey.new()
-        event.physical_keycode = keys[action]
-        if not InputMap.action_get_events(action).any(func(e): return e is InputEventKey and e.physical_keycode == keys[action]):
+            var event := InputEventKey.new()
+            event.physical_keycode = keys[action]
             InputMap.action_add_event(action, event)
 
 func _mat(color: Color, metallic: float = 0.0, roughness: float = 0.82) -> StandardMaterial3D:
@@ -121,9 +120,6 @@ func _physics_process(delta: float) -> void:
     var input_2d := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
     var direction := Vector3(input_2d.x, 0.0, input_2d.y)
     if direction.length() > 0.01:
-        var camera_basis := $CameraPivot.global_transform.basis
-        direction = camera_basis * direction
-        direction.y = 0.0
         direction = direction.normalized()
     velocity.x = move_toward(velocity.x, direction.x * move_speed, acceleration * delta)
     velocity.z = move_toward(velocity.z, direction.z * move_speed, acceleration * delta)
