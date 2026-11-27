@@ -18,10 +18,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check Godot and Android export tools
+      - name: Install matching Godot export templates
         run: |
           godot --version
-          test -d "$HOME/.local/share/godot/export_templates/4.4.1.stable"
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.4.1.stable"
+          curl -fL --retry 3 "https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_export_templates.tpz" -o /tmp/godot-templates.tpz
+          mkdir -p /tmp/godot-templates
+          unzip -q /tmp/godot-templates.tpz -d /tmp/godot-templates
+          cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.4.1.stable/"
           test -n "$ANDROID_HOME"
           test -x "$ANDROID_HOME/platform-tools/adb" || command -v adb
 
