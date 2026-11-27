@@ -1,11 +1,11 @@
-# GHOST OPEN WORLD
+# GTA: ساخت نیک گیمر
 
 A mobile-first third-person 3D urban exploration prototype for Android, targeting the Poco X7 Pro.
 
 ## Agreed direction
 - Play as a masked operator inspired by the broad look of Ghost, using original/licensed assets rather than copied commercial game files.
 - Open city roaming first: no story missions or levels yet. Missions can be added later.
-- Visual target: a lightweight, classic-era 3D look in the spirit of GTA: San Andreas, not GTA V-level rendering.
+- Visual target: approach the overall presentation quality of MadOut 2 as closely as practical, while using original or properly licensed assets and optimizing for Android.
 - Third-person camera and basic movement.
 - A clothing shop with multiple operator outfit styles that can be unlocked with in-game coins.
 
