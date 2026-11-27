@@ -16,7 +16,7 @@ A mobile-first third-person 3D urban exploration prototype for Android, targetin
 - An initial outfit shop UI with five placeholder color styles and a simple coin balance.
 
 ## Important prototype limits
-The character is currently a capsule placeholder; outfit choices currently change its material color, not a finished 3D uniform model. The city is not yet a complete open world. Mobile touch controls, proper character models, detailed streets/buildings, saving purchases, and Android export still need implementation and testing in Godot on a device.
+The character is currently a capsule placeholder; outfit choices currently change its material color, not a finished 3D uniform model. The city is not yet a complete open world. The current character and city are still procedural blockout assets; detailed licensed/original 3D models, PBR texture sets, full traffic and pedestrian systems, persistent purchases, and real-device testing remain future work.
 
 GitHub stores the project source; it does not run Godot or automatically create a tested APK.
 
