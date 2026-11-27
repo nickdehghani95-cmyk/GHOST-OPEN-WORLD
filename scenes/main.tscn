@@ -14,8 +14,14 @@ background_mode = 1
 background_color = Color(0.22, 0.34, 0.48, 1)
 ambient_light_source = 3
 ambient_light_color = Color(0.72, 0.78, 0.88, 1)
-ambient_light_energy = 0.75
+ambient_light_energy = 0.9
 tonemap_mode = 2
+fog_enabled = true
+fog_light_color = Color(0.52, 0.63, 0.72, 1)
+fog_density = 0.0018
+glow_enabled = true
+glow_intensity = 0.28
+glow_bloom = 0.08
 
 [node name="Main" type="Node3D"]
 
@@ -42,12 +48,13 @@ shape = SubResource("CapsuleShape_player")
 position = Vector3(0, 1.5, 0)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="Player/CameraPivot"]
-spring_length = 4.6
-margin = 0.15
+spring_length = 5.2
+margin = 0.2
 
 [node name="Camera3D" type="Camera3D" parent="Player/CameraPivot/SpringArm3D"]
 current = true
-fov = 72.0
+fov = 68.0
+far = 1200.0
 
 [node name="OutfitShop" type="CanvasLayer" parent="."]
 script = ExtResource("2_shop")
