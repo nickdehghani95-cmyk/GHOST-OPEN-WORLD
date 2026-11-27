@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/outfit_shop.gd" id="2_shop"]
 [ext_resource type="Script" path="res://scripts/city_generator.gd" id="3_city"]
+[ext_resource type="Script" path="res://scripts/touch_controls.gd" id="4_touch"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape_player"]
 radius = 0.38
@@ -31,3 +32,14 @@ current = true
 
 [node name="OutfitShop" type="CanvasLayer" parent="."]
 script = ExtResource("2_shop")
+
+[node name="TouchControls" type="CanvasLayer" parent="."]
+
+[node name="TouchHUD" type="Control" parent="TouchControls"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_touch")
