@@ -20,6 +20,8 @@ jobs:
 
       - name: Install matching Godot export templates
         run: |
+          apt-get update
+          apt-get install -y --no-install-recommends curl
           godot --version
           mkdir -p "$HOME/.local/share/godot/export_templates/4.4.1.stable"
           curl -fL --retry 3 "https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_export_templates.tpz" -o /tmp/godot-templates.tpz
