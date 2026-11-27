@@ -70,6 +70,7 @@ func _build_city() -> void:
     _make_milad_tower(Vector3(0, 0, -total * 0.5 - 30.0))
     _make_mountain_ridge(total)
     _make_traffic_props(total)
+    _make_city_details(total)
 
 func _make_building_block(center: Vector3, grid_x: int, grid_z: int) -> void:
     var count := rng.randi_range(1, 3)
@@ -161,6 +162,69 @@ func _make_traffic_props(total: float) -> void:
         for side in [-1.0, 1.0]:
             for front in [-1.0, 1.0]:
                 _add_child_cylinder(car, "Wheel", 0.36, 0.22, Vector3(side * 1.0, 0.38, front * 1.25), trim_mat)
+
+
+func _make_city_details(total: float) -> void:
+    # Low-cost original street dressing: crosswalks, trees, traffic signals and rooftop equipment.
+    var crosswalk_mat := StandardMaterial3D.new()
+    crosswalk_mat.albedo_color = Color(0.82, 0.83, 0.80)
+    var tree_mat := StandardMaterial3D.new()
+    tree_mat.albedo_color = Color(0.12, 0.25, 0.16)
+    var trunk_mat := StandardMaterial3D.new()
+    trunk_mat.albedo_color = Color(0.20, 0.14, 0.10)
+    var signal_mat := StandardMaterial3D.new()
+    signal_mat.albedo_color = Color(0.035, 0.045, 0.05)
+    var red_mat := StandardMaterial3D.new()
+    red_mat.albedo_color = Color(0.8, 0.08, 0.045)
+    red_mat.emission_enabled = true
+    red_mat.emission = Color(0.65, 0.025, 0.01)
+    red_mat.emission_energy_multiplier = 0.5
+    var green_mat := StandardMaterial3D.new()
+    green_mat.albedo_color = Color(0.06, 0.65, 0.22)
+    green_mat.emission_enabled = true
+    green_mat.emission = Color(0.02, 0.4, 0.08)
+    green_mat.emission_energy_multiplier = 0.45
+
+    for i in range(blocks_per_side + 1):
+        var offset := -total * 0.5 + road_width * 0.5 + i * (block_size + road_width)
+        # Zebra crossings at selected major intersections.
+        if i % 2 == 0:
+            for stripe in range(6):
+                var along := -2.7 + float(stripe) * 1.08
+                _add_box("CrosswalkNS_%d_%d" % [i, stripe], Vector3(road_width * 0.72, 0.025, 0.42), Vector3(offset, 0.025, offset + along), crosswalk_mat, false)
+                _add_box("CrosswalkEW_%d_%d" % [i, stripe], Vector3(0.42, 0.025, road_width * 0.72), Vector3(offset + along, 0.025, offset), crosswalk_mat, false)
+        # A restrained number of trees keeps the mobile scene readable and light.
+        if i < blocks_per_side:
+            for side in [-1.0, 1.0]:
+                var tree_pos := Vector3(offset + side * 4.4, 0, -total * 0.28 + float(i) * 18.0)
+                _add_cylinder("TreeTrunk_%d_%d" % [i, int(side)], 0.16, 2.1, tree_pos + Vector3(0, 1.05, 0), trunk_mat, false)
+                var crown := MeshInstance3D.new()
+                crown.name = "TreeCrown_%d_%d" % [i, int(side)]
+                var crown_mesh := SphereMesh.new()
+                crown_mesh.radius = 1.25
+                crown_mesh.height = 2.5
+                crown.mesh = crown_mesh
+                crown.position = tree_pos + Vector3(0, 2.8, 0)
+                crown.material_override = tree_mat
+                add_child(crown)
+        # Traffic signal heads at alternating intersections.
+        if i % 2 == 0:
+            var signal_pos := Vector3(offset + road_width * 0.5 + 1.2, 3.2, offset + road_width * 0.5 + 1.2)
+            _add_box("TrafficSignalPole_%d" % i, Vector3(0.12, 6.2, 0.12), signal_pos + Vector3(0, -0.1, 0), trim_mat, false)
+            _add_box("TrafficSignalBox_%d" % i, Vector3(0.48, 1.15, 0.34), signal_pos + Vector3(0, 2.7, 0), signal_mat, false)
+            _add_sphere("TrafficSignalRed_%d" % i, 0.13, signal_pos + Vector3(0, 3.03, -0.19), red_mat)
+            _add_sphere("TrafficSignalGreen_%d" % i, 0.13, signal_pos + Vector3(0, 2.42, -0.19), green_mat)
+
+func _add_sphere(label: String, radius: float, pos: Vector3, material: Material) -> void:
+    var mesh_instance := MeshInstance3D.new()
+    mesh_instance.name = label
+    var sphere := SphereMesh.new()
+    sphere.radius = radius
+    sphere.height = radius * 2.0
+    mesh_instance.mesh = sphere
+    mesh_instance.position = pos
+    mesh_instance.material_override = material
+    add_child(mesh_instance)
 
 func _add_child_box(parent: Node3D, label: String, box_size: Vector3, pos: Vector3, material: Material) -> void:
     var mesh_instance := MeshInstance3D.new()
