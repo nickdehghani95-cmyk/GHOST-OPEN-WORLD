@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/outfit_shop.gd" id="2_shop"]
@@ -9,13 +9,30 @@
 radius = 0.38
 height = 1.8
 
+[sub_resource type="Environment" id="Environment_main"]
+background_mode = 1
+background_color = Color(0.22, 0.34, 0.48, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.72, 0.78, 0.88, 1)
+ambient_light_energy = 0.75
+tonemap_mode = 2
+
 [node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_main")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-48, -32, 0)
+light_color = Color(1, 0.91, 0.78, 1)
+light_energy = 1.35
+shadow_enabled = true
 
 [node name="City" type="Node3D" parent="."]
 script = ExtResource("3_city")
 
 [node name="Player" type="CharacterBody3D" parent="."]
-position = Vector3(0, 1, 0)
+position = Vector3(18, 1.05, 18)
 script = ExtResource("1_player")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
@@ -25,10 +42,12 @@ shape = SubResource("CapsuleShape_player")
 position = Vector3(0, 1.5, 0)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="Player/CameraPivot"]
-spring_length = 4.0
+spring_length = 4.6
+margin = 0.15
 
 [node name="Camera3D" type="Camera3D" parent="Player/CameraPivot/SpringArm3D"]
 current = true
+fov = 72.0
 
 [node name="OutfitShop" type="CanvasLayer" parent="."]
 script = ExtResource("2_shop")
