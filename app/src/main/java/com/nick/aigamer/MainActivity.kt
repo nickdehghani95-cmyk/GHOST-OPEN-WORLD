@@ -116,8 +116,8 @@ fun HomePanel(open: (String) -> Unit) {
 }
 
 @Composable
-fun FeatureTile(title: String, subtitle: String, click: () -> Unit) {
-    Column(Modifier.weight(1f).fillMaxWidth().border(1.dp, Red, RoundedCornerShape(13.dp))
+fun FeatureTile(title: String, subtitle: String, modifier: Modifier = Modifier, click: () -> Unit) {
+    Column(modifier.fillMaxWidth().border(1.dp, Red, RoundedCornerShape(13.dp))
         .background(Panel, RoundedCornerShape(13.dp)).clickable { click() }.padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
         Text(title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp, textAlign = TextAlign.Center)
