@@ -5,20 +5,34 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   android-apk:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     container:
       image: barichello/godot-ci:4.4.1
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check Godot and Android export tools
+        run: |
+          godot --version
+          test -d "$HOME/.local/share/godot/export_templates/4.4.1.stable"
+          test -n "$ANDROID_HOME"
+          test -x "$ANDROID_HOME/platform-tools/adb" || command -v adb
+
+      - name: Import project resources
+        run: godot --headless --path . --editor --import --quit
+
       - name: Export debug APK
         run: |
           mkdir -p build
-          godot --headless --path . --editor --quit
           godot --headless --path . --export-debug "Android" build/ghost-open-world-debug.apk
+          test -s build/ghost-open-world-debug.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
@@ -26,3 +40,4 @@ jobs:
           name: ghost-open-world-android-debug
           path: build/ghost-open-world-debug.apk
           if-no-files-found: error
+          retention-days: 14
