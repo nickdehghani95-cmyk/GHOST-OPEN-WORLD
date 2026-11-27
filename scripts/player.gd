@@ -8,6 +8,10 @@ extends CharacterBody3D
 var jacket_material: StandardMaterial3D
 var avatar: Node3D
 var animation_clock: float = 0.0
+var left_arm_pivot: Node3D
+var right_arm_pivot: Node3D
+var left_leg_pivot: Node3D
+var right_leg_pivot: Node3D
 
 func _ready() -> void:
     _setup_input()
@@ -94,12 +98,21 @@ func _build_ghost_character() -> void:
     _sphere(avatar, "LeftHeadset", 0.09, Vector3(-0.205, 1.88, 0.015), armor)
     _sphere(avatar, "RightHeadset", 0.09, Vector3(0.205, 1.88, 0.015), armor)
 
-    _capsule(avatar, "LeftUpperArm", 0.115, 0.48, Vector3(-0.42, 1.28, 0), fabric)
-    _capsule(avatar, "RightUpperArm", 0.115, 0.48, Vector3(0.42, 1.28, 0), fabric)
-    _capsule(avatar, "LeftForearm", 0.095, 0.38, Vector3(-0.45, 0.91, -0.015), black)
-    _capsule(avatar, "RightForearm", 0.095, 0.38, Vector3(0.45, 0.91, -0.015), black)
-    _sphere(avatar, "LeftGlove", 0.09, Vector3(-0.45, 0.68, -0.02), dark)
-    _sphere(avatar, "RightGlove", 0.09, Vector3(0.45, 0.68, -0.02), dark)
+    left_arm_pivot = Node3D.new()
+    left_arm_pivot.name = "LeftArmJoint"
+    left_arm_pivot.position = Vector3(-0.42, 1.48, 0)
+    avatar.add_child(left_arm_pivot)
+    _capsule(left_arm_pivot, "LeftUpperArm", 0.115, 0.48, Vector3(0, -0.24, 0), fabric)
+    _capsule(left_arm_pivot, "LeftForearm", 0.095, 0.38, Vector3(-0.025, -0.57, -0.015), black)
+    _sphere(left_arm_pivot, "LeftGlove", 0.09, Vector3(-0.03, -0.80, -0.02), dark)
+
+    right_arm_pivot = Node3D.new()
+    right_arm_pivot.name = "RightArmJoint"
+    right_arm_pivot.position = Vector3(0.42, 1.48, 0)
+    avatar.add_child(right_arm_pivot)
+    _capsule(right_arm_pivot, "RightUpperArm", 0.115, 0.48, Vector3(0, -0.24, 0), fabric)
+    _capsule(right_arm_pivot, "RightForearm", 0.095, 0.38, Vector3(0.025, -0.57, -0.015), black)
+    _sphere(right_arm_pivot, "RightGlove", 0.09, Vector3(0.03, -0.80, -0.02), dark)
 
     _box(avatar, "TacticalVest", Vector3(0.57, 0.52, 0.18), Vector3(0, 1.23, -0.235), armor)
     for i in range(4):
@@ -109,14 +122,23 @@ func _build_ghost_character() -> void:
     _box(avatar, "LeftShoulderPatch", Vector3(0.13, 0.10, 0.035), Vector3(-0.49, 1.37, -0.04), metal)
 
     _capsule(avatar, "Waist", 0.27, 0.32, Vector3(0, 0.72, 0), pants)
-    _capsule(avatar, "LeftCargoLeg", 0.135, 0.62, Vector3(-0.17, 0.34, 0), pants)
-    _capsule(avatar, "RightCargoLeg", 0.135, 0.62, Vector3(0.17, 0.34, 0), pants)
-    _box(avatar, "LeftCargoPocket", Vector3(0.13, 0.19, 0.09), Vector3(-0.28, 0.42, -0.04), fabric)
-    _box(avatar, "RightCargoPocket", Vector3(0.13, 0.19, 0.09), Vector3(0.28, 0.42, -0.04), fabric)
-    _box(avatar, "LeftCombatBoot", Vector3(0.20, 0.16, 0.34), Vector3(-0.17, 0.08, -0.065), boot)
-    _box(avatar, "RightCombatBoot", Vector3(0.20, 0.16, 0.34), Vector3(0.17, 0.08, -0.065), boot)
-    _box(avatar, "LeftBootSole", Vector3(0.205, 0.035, 0.35), Vector3(-0.17, 0.012, -0.065), metal)
-    _box(avatar, "RightBootSole", Vector3(0.205, 0.035, 0.35), Vector3(0.17, 0.012, -0.065), metal)
+    left_leg_pivot = Node3D.new()
+    left_leg_pivot.name = "LeftLegJoint"
+    left_leg_pivot.position = Vector3(-0.17, 0.62, 0)
+    avatar.add_child(left_leg_pivot)
+    _capsule(left_leg_pivot, "LeftCargoLeg", 0.135, 0.62, Vector3(0, -0.31, 0), pants)
+    _box(left_leg_pivot, "LeftCargoPocket", Vector3(0.13, 0.19, 0.09), Vector3(-0.11, -0.20, -0.04), fabric)
+    _box(left_leg_pivot, "LeftCombatBoot", Vector3(0.20, 0.16, 0.34), Vector3(0, -0.54, -0.065), boot)
+    _box(left_leg_pivot, "LeftBootSole", Vector3(0.205, 0.035, 0.35), Vector3(0, -0.608, -0.065), metal)
+
+    right_leg_pivot = Node3D.new()
+    right_leg_pivot.name = "RightLegJoint"
+    right_leg_pivot.position = Vector3(0.17, 0.62, 0)
+    avatar.add_child(right_leg_pivot)
+    _capsule(right_leg_pivot, "RightCargoLeg", 0.135, 0.62, Vector3(0, -0.31, 0), pants)
+    _box(right_leg_pivot, "RightCargoPocket", Vector3(0.13, 0.19, 0.09), Vector3(0.11, -0.20, -0.04), fabric)
+    _box(right_leg_pivot, "RightCombatBoot", Vector3(0.20, 0.16, 0.34), Vector3(0, -0.54, -0.065), boot)
+    _box(right_leg_pivot, "RightBootSole", Vector3(0.205, 0.035, 0.35), Vector3(0, -0.608, -0.065), metal)
 
 func _physics_process(delta: float) -> void:
     var input_2d := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
@@ -139,14 +161,24 @@ func _physics_process(delta: float) -> void:
     if direction.length() > 0.1:
         look_at(global_position + direction, Vector3.UP)
     move_and_slide()
-    # Lightweight procedural idle/walk motion while proper rigged animation assets are prepared.
+    # Animate articulated limbs only while grounded; feet remain aligned with the floor.
     animation_clock += delta
     if avatar:
         var horizontal_speed := Vector2(velocity.x, velocity.z).length()
-        var moving := horizontal_speed > 0.35
-        var bob_amount := 0.045 if moving else 0.012
-        avatar.position.y = sin(animation_clock * (10.0 if moving else 2.0)) * bob_amount
-        avatar.rotation.z = sin(animation_clock * 5.0) * (0.025 if moving else 0.008)
+        var moving := is_on_floor() and horizontal_speed > 0.35
+        var gait_speed := clampf(horizontal_speed / move_speed, 0.0, 1.35)
+        var swing := sin(animation_clock * 8.5) * 0.48 * gait_speed if moving else 0.0
+        if left_leg_pivot:
+            left_leg_pivot.rotation.x = swing
+        if right_leg_pivot:
+            right_leg_pivot.rotation.x = -swing
+        if left_arm_pivot:
+            left_arm_pivot.rotation.x = -swing * 0.72
+        if right_arm_pivot:
+            right_arm_pivot.rotation.x = swing * 0.72
+        # No vertical bob: the character model stays planted instead of appearing to walk in mid-air.
+        avatar.position.y = 0.0
+        avatar.rotation.z = 0.0
 
 func set_outfit_color(color: Color) -> void:
     if jacket_material:
