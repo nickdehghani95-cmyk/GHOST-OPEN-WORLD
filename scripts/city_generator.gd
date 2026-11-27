@@ -80,6 +80,9 @@ func _make_building_block(center: Vector3, grid_x: int, grid_z: int) -> void:
         var local_x := rng.randf_range(-4.2, 4.2)
         var local_z := rng.randf_range(-4.2, 4.2)
         var pos := center + Vector3(local_x, height * 0.5, local_z)
+        # Keep a clear spawn plaza around the starting intersection.
+        if Vector2(pos.x - 18.0, pos.z - 18.0).length() < 15.0:
+            continue
         var size := Vector3(width, height, depth)
         var material: Material = building_mats[rng.randi_range(0, building_mats.size() - 1)]
         _add_box("Building_%d_%d_%d" % [grid_x, grid_z, index], size, pos, material, true)
