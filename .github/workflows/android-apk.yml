@@ -1,0 +1,28 @@
+name: Android test APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  android-apk:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.4.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Export debug APK
+        run: |
+          mkdir -p build
+          godot --headless --path . --editor --quit
+          godot --headless --path . --export-debug "Android" build/ghost-open-world-debug.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ghost-open-world-android-debug
+          path: build/ghost-open-world-debug.apk
+          if-no-files-found: error
