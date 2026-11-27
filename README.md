@@ -19,3 +19,13 @@ A mobile-first third-person 3D urban exploration prototype for Android, targetin
 The character is currently a capsule placeholder; outfit choices currently change its material color, not a finished 3D uniform model. The city is not yet a complete open world. Mobile touch controls, proper character models, detailed streets/buildings, saving purchases, and Android export still need implementation and testing in Godot on a device.
 
 GitHub stores the project source; it does not run Godot or automatically create a tested APK.
+
+## Build progress
+
+### Step 1 — Open roaming city
+- Added a procedural city generator with a 5-by-5 block layout.
+- Added a grid of roads and low-poly building blocks with collision.
+- Connected the city generator to the main scene.
+- Kept story missions and levels out of the project, as requested.
+
+This is a lightweight blockout made from Godot primitive meshes, not a finished detailed city. It has not yet been launched in the Godot editor or tested on a Poco X7 Pro. Next step: improve player movement and add on-screen mobile controls.
