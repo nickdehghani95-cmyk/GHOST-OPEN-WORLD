@@ -98,9 +98,9 @@ fun HomePanel(open: (String) -> Unit) {
             Text("برای شروع، یکی از قابلیت‌ها را انتخاب کن.", color = Muted, fontSize = 12.sp)
         }
         Column(Modifier.weight(1.35f), verticalArrangement = Arrangement.spacedBy(9.dp)) {
-            FeatureTile("چت با هوش مصنوعی", "گفت‌وگو و پرسش و پاسخ") { open("چت هوش مصنوعی") }
-            FeatureTile("عکس‌ساز با هوش مصنوعی", "ساخت تصویر از توضیحات متنی") { open("عکس‌ساز") }
-            FeatureTile("پنل ادمین", "تنظیمات و مدیریت") { open("پنل ادمین") }
+            FeatureTile("چت با هوش مصنوعی", "گفت‌وگو و پرسش و پاسخ", Modifier.weight(1f)) { open("چت هوش مصنوعی") }
+            FeatureTile("عکس‌ساز با هوش مصنوعی", "ساخت تصویر از توضیحات متنی", Modifier.weight(1f)) { open("عکس‌ساز") }
+            FeatureTile("پنل ادمین", "تنظیمات و مدیریت", Modifier.weight(1f)) { open("پنل ادمین") }
         }
         Column(Modifier.weight(1f).fillMaxHeight().background(Panel, RoundedCornerShape(14.dp)).padding(12.dp)) {
             Text("👑 پنل ادمین", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
