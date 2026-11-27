@@ -11,17 +11,21 @@ permissions:
 jobs:
   android-apk:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     container:
       image: barichello/godot-ci:4.4.1
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install matching Godot export templates
+      - name: Install Android export prerequisites
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends curl
+          apt-get install -y --no-install-recommends curl openjdk-17-jdk unzip
+          export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+          export PATH="$JAVA_HOME/bin:$PATH"
+          echo "JAVA_HOME=$JAVA_HOME"
+          java -version
           godot --version
           mkdir -p "$HOME/.local/share/godot/export_templates/4.4.1.stable"
           curl -fL --retry 3 "https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_export_templates.tpz" -o /tmp/godot-templates.tpz
@@ -30,6 +34,18 @@ jobs:
           cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.4.1.stable/"
           test -n "$ANDROID_HOME"
           test -x "$ANDROID_HOME/platform-tools/adb" || command -v adb
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/cmdline-tools/bin/sdkmanager"
+          if [ -x "$SDKMANAGER" ]; then
+            yes | "$SDKMANAGER" --sdk_root="$ANDROID_HOME" "platforms;android-34" "build-tools;34.0.0" || true
+          fi
+          mkdir -p "$HOME/.config/godot"
+          cat > "$HOME/.config/godot/editor_settings-4.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+          [resource]
+          export/android/java_sdk_path = "$JAVA_HOME"
+          export/android/android_sdk_path = "$ANDROID_HOME"
+          EOF
+          keytool -genkeypair -v -keystore "$HOME/.android/debug.keystore" -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
 
       - name: Import project resources
         run: godot --headless --path . --editor --import --quit
@@ -39,6 +55,11 @@ jobs:
           mkdir -p build
           godot --headless --path . --export-debug "Android" build/ghost-open-world-debug.apk
           test -s build/ghost-open-world-debug.apk
+
+      - name: Verify APK package
+        run: |
+          test -s build/ghost-open-world-debug.apk
+          "$ANDROID_HOME/build-tools/34.0.0/aapt" dump badging build/ghost-open-world-debug.apk | grep "package: name='org.nickdehghani.ghostopenworld'"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
