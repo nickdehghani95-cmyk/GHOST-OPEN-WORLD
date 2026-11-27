@@ -34,3 +34,8 @@ This is a lightweight blockout made from Godot primitive meshes, not a finished 
 - Replaced the single capsule placeholder with a human-proportioned masked operator assembled from separate head, torso, arms, legs, helmet and gear meshes.
 - Added a pale skull-style face mask and dark tactical outfit details to evoke the requested Ghost-like look.
 - This is still a procedural low-poly placeholder, not a finished realistic scanned/rigged character model; animations, detailed textures and a licensed/original high-quality model remain future work.
+
+### Mobile touch controls
+- Added an on-screen virtual joystick on the lower-left and a jump button on the lower-right.
+- The controls send the same movement and jump actions used by the player controller. Mouse interaction is also supported for basic desktop input checks.
+- The Godot project files are committed to GitHub, but the scene has not yet been launched in Godot or tested on a physical Android device.
